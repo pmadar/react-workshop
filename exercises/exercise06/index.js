@@ -59,26 +59,25 @@ const container = document.getElementById('container');
  *
  * Exercise:
  *
- *  Create a `RepoList` component that lists all the GitHub repos for a user.
- *  Allow the user to be provided as a prop.
+ *  Create a `PostsList` component that lists all the wordpress posts.
  *
- *  https://api.github.com/users/{username}/repos
+ *  http://wordpress.dev/wp-json/wp/v2/posts
  */
 
-class RepoList extends Component {
+class PostsList extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      repos: []
+      posts: []
     };
   }
 
   componentWillMount() {
-    axios(`https://api.github.com/users/${this.props.user}/repos?per_page=250`)
+    axios(`http://wordpress.dev/wp-json/wp/v2/posts`)
       .then((response) => {
         this.setState({
-          repos: response.data
+          posts: response.data
         });
       });
   }
@@ -86,16 +85,16 @@ class RepoList extends Component {
   render() {
     return (
       <ul>
-        {this.state.repos.map((repo) => {
-          return <li key={repo.id}>{repo.name}</li>;
+        {this.state.posts.map((post) => {
+          return <li key={post.id}>{post.title.rendered}</li>;
         })}
       </ul>
     );
   }
 }
 
-RepoList.propTypes = {
+PostsList.propTypes = {
   user: PropTypes.string
 };
 
-ReactDOM.render(<RepoList user="mzabriskie"/>, container);
+ReactDOM.render(<PostsList />, container);
